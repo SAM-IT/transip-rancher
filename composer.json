@@ -1,0 +1,16 @@
+{
+    "name": "sam-it/transip-rancher",
+    "description": "A simple script to direct a TransIP HA-IP to a rancher host",
+    "minimum-stability": "dev",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sam Mousa",
+            "email": "sam@mousa.nl"
+        }
+    ],
+    "require": {
+        "sam-it/transip-api": "dev-master"
+    }
+}
