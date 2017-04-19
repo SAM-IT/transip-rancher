@@ -20,4 +20,4 @@ RUN curl -sS https://getcomposer.org/installer | php7 -- --install-dir=/bin --fi
 RUN mkdir /project
 COPY . /project
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD /usr/bin/php /project/update-haip.php
+CMD /project/watch.sh

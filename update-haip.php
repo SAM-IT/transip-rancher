@@ -53,28 +53,24 @@ $factory = new \SamIT\TransIP\ServiceFactory(
     'readwrite'
 );
 
-while(true) {
-    try {
-        $ips = getPublicIps($service);
-        $haip = $factory->getHaipService()->getHaips()[0];
-        log_message("Found: {$haip->getName()} with IP {$haip->getVpsIpv4Address()}");
+try {
+    $ips = getPublicIps($service);
+    $haip = $factory->getHaipService()->getHaips()[0];
+    log_message("Found: {$haip->getName()} with IP {$haip->getVpsIpv4Address()}");
 
-        // Check if the HA-IP is already one of the public IPs for the service.
-        if (!in_array($haip->getVpsIpv4Address(), $ips, true)) {
+    // Check if the HA-IP is already one of the public IPs for the service.
+    if (!in_array($haip->getVpsIpv4Address(), $ips, true)) {
 
-            // Iterate over VPSes.
-            foreach ($factory->getVpsService()->getVpses() as $vps) {
-                if (in_array($vps->getIpAddress(), $ips, true)) {
-                    log_message("Changing HA-IP to {$vps->getIpAddress()}..", true);
-                    $factory->getHaipService()->changeHaipVps($haip->getName(), $vps->getName());
-                    break;
-                }
+        // Iterate over VPSes.
+        foreach ($factory->getVpsService()->getVpses() as $vps) {
+            if (in_array($vps->getIpAddress(), $ips, true)) {
+                log_message("Changing HA-IP to {$vps->getIpAddress()}..", true);
+                $factory->getHaipService()->changeHaipVps($haip->getName(), $vps->getName());
+                break;
             }
         }
-    } catch (\Throwable $t) {
-        fwrite(STDERR, $t->getMessage() . "\n");
-        fwrite(STDERR, $t->getTraceAsString());
     }
-
-    sleep($interval);
+} catch (\Throwable $t) {
+    fwrite(STDERR, $t->getMessage() . "\n");
+    fwrite(STDERR, $t->getTraceAsString());
 }
